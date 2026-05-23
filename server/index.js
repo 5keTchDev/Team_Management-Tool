@@ -12,12 +12,22 @@ const port = process.env.PORT || 4000;
 
 app.use(cors({ origin: true }));
 app.use(express.json());
-app.use('/api/auth', authRoutes);
-app.use('/api/projects', projectRoutes);
-app.use('/api', taskRoutes);
-app.use('/api/dashboard', dashboardRoutes);
+
+app.get('/', (req, res) => {
+  res.json({
+    name: 'Team Task Manager API',
+    status: 'ok',
+    health: '/api/health',
+    client: 'http://localhost:5173',
+  });
+});
 
 app.get('/api/health', (req, res) => res.json({ status: 'ok' }));
+
+app.use('/api/auth', authRoutes);
+app.use('/api/projects', projectRoutes);
+app.use('/api/dashboard', dashboardRoutes);
+app.use('/api', taskRoutes);
 
 initDb()
   .then(() => {
